@@ -62,3 +62,20 @@ python app.py
 ```
 
 This will enable debug mode and auto-reload on file changes.
+
+
+
+## Preview
+
+Home
+<img width="1919" height="942" alt="image" src="https://github.com/user-attachments/assets/7150bf85-67c8-46e8-b4b0-2cf399a1db5b" />
+Projects
+<img width="1919" height="941" alt="image" src="https://github.com/user-attachments/assets/4eb87144-b671-4c89-ab05-4492cd582e8d" />
+Registration
+<img width="1919" height="943" alt="image" src="https://github.com/user-attachments/assets/c4f62d0c-0a3b-45a0-8c24-b63a3699eb1d" />
+Admin Panel
+<img width="1919" height="943" alt="image" src="https://github.com/user-attachments/assets/5aa44f8c-dd87-4552-bb63-e1f11e82d5dc" />
+
+
+
+
