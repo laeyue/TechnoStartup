@@ -1,0 +1,357 @@
+{% extends "base.html" %}
+
+{% block title %}Green Stamp | Register Project{% endblock %}
+
+{% block styles %}
+    main {
+      padding: 2rem;
+      max-width: 600px;
+      margin: 2rem auto;
+      background: var(--gradient-light);
+      border: 1px solid rgba(133, 169, 71, 0.3);
+      border-radius: .75rem;
+      box-shadow: var(--shadow-xl);
+      position: relative;
+      overflow: hidden;
+    }
+
+    main::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        linear-gradient(135deg, rgba(133, 169, 71, 0.1) 0%, transparent 50%),
+        linear-gradient(45deg, rgba(62, 123, 39, 0.05) 0%, transparent 50%);
+      z-index: 0;
+    }
+
+    main > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .form-header h2 {
+      color: var(--text-primary);
+      font-weight: 700;
+      font-size: var(--text-3xl);
+      margin-bottom: 1rem;
+    }
+
+    .form-header p {
+      color: var(--text-secondary);
+      font-weight: 500;
+      font-size: var(--text-lg);
+      margin-bottom: 2rem;
+    }
+
+    main::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        linear-gradient(135deg, rgba(133, 169, 71, 0.1) 0%, transparent 50%),
+        linear-gradient(45deg, rgba(62, 123, 39, 0.05) 0%, transparent 50%);
+      z-index: 0;
+    }
+
+    main > * {
+      position: relative;
+      z-index: 2;
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .form-header h2 {
+      font-size: var(--text-3xl);
+      color: var(--gray-100);
+      margin-bottom: 1rem;
+    }
+
+    .form-header p {
+      color: var(--gray-400);
+      font-size: var(--text-lg);
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    label {
+      font-weight: 600;
+      color: var(--gray-100);
+      font-size: var(--text-md);
+    }
+
+    input, textarea {
+      padding: 1rem 1.25rem;
+      border: 2px solid rgba(133, 169, 71, 0.3);
+      border-radius: 12px;
+      font-size: var(--text-base);
+      font-family: var(--font-body);
+      background: var(--white);
+      color: var(--text-primary);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      resize: none;
+      width: 100%;
+      font-weight: 500;
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: var(--white);
+      box-shadow: 0 0 0 4px rgba(133, 169, 71, 0.2), var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .form-group {
+      position: relative;
+      margin-bottom: var(--space-lg);
+    }
+
+    .form-group.focused label {
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .form-group.focused input,
+    .form-group.focused textarea {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(133, 169, 71, 0.1);
+    }
+
+    .form-progress {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: var(--space-xl);
+      padding: var(--space-md);
+      background: var(--gradient-light);
+      border-radius: var(--radius-lg);
+    }
+
+    .form-step {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+    }
+
+    .form-step.active {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .form-step.completed {
+      color: var(--secondary);
+    }
+
+    input:hover, textarea:hover {
+      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .thank-you {
+      display: none;
+      text-align: center;
+      font-size: var(--text-xl);
+      color: var(--text-white);
+      font-weight: bold;
+      padding: 2rem;
+      background: var(--gradient-primary);
+      border-radius: .75rem;
+      border: 1px solid rgba(133, 169, 71, 0.3);
+      box-shadow: var(--shadow-lg);
+      animation: slideInUp 0.5s ease-out;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 1rem;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(46, 125, 50, 0.3);
+      border-top: 4px solid var(--accent-regular);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .form-group {
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: var(--text-md);
+      transition: color 0.3s ease;
+    }
+
+    .form-group:focus-within label {
+      color: var(--accent-regular);
+    }
+
+    @media (min-width: 50em) {
+      main {
+        border-radius: 1.5rem;
+        padding: 3rem;
+      }
+
+      .form-header h2 {
+        font-size: var(--text-4xl);
+      }
+    }
+{% endblock %}
+
+{% block content %}
+<main>
+  <div class="form-header">
+    <h2>Register Your Project</h2>
+    <p>Submit your community or environmental project for Green Stamp evaluation.</p>
+  </div>
+  
+      <form id="registerForm">
+        <div class="form-group">
+          <label for="projectName">Project Name</label>
+          <input type="text" id="projectName" name="projectName" placeholder="Enter your project name" required />
+        </div>
+        
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input type="text" id="location" name="location" placeholder="Enter project location" required />
+        </div>
+        
+        <div class="form-group">
+          <label for="description">Project Description</label>
+          <textarea id="description" name="description" rows="4" placeholder="Describe your project and its environmental impact" required></textarea>
+        </div>
+        
+        <button type="submit" class="btn" id="submitBtn">
+          <span id="btnText">Submit Project</span>
+        </button>
+      </form>
+      
+      <div class="loading" id="loadingMsg">
+        <div class="spinner"></div>
+        <p>Submitting your project...</p>
+      </div>
+      
+      <div class="thank-you" id="thankYouMsg">
+        🌿 Thank you for submitting your project! Our team will review it soon.
+      </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const form = document.getElementById("registerForm");
+  const thankYou = document.getElementById("thankYouMsg");
+  const loading = document.getElementById("loadingMsg");
+  const submitBtn = document.getElementById("submitBtn");
+  const btnText = document.getElementById("btnText");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    
+    // Show loading state
+    form.style.display = "none";
+    loading.style.display = "block";
+    submitBtn.disabled = true;
+    btnText.textContent = "Submitting...";
+    
+    const formData = {
+      name: document.getElementById("projectName").value,
+      location: document.getElementById("location").value,
+      description: document.getElementById("description").value
+    };
+
+    try {
+      const response = await fetch('/submit_project', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        loading.style.display = "none";
+        thankYou.style.display = "block";
+      } else {
+        loading.style.display = "none";
+        form.style.display = "block";
+        submitBtn.disabled = false;
+        btnText.textContent = "Submit Project";
+        alert('Error: ' + result.message);
+      }
+    } catch (error) {
+      loading.style.display = "none";
+      form.style.display = "block";
+      submitBtn.disabled = false;
+      btnText.textContent = "Submit Project";
+      alert('Error submitting project: ' + error.message);
+    }
+  });
+
+  // Add smooth focus animations
+  const inputs = document.querySelectorAll('input, textarea');
+  inputs.forEach(input => {
+    input.addEventListener('focus', function() {
+      this.parentElement.classList.add('focused');
+    });
+    
+    input.addEventListener('blur', function() {
+      this.parentElement.classList.remove('focused');
+    });
+  });
+</script>
+{% endblock %}
