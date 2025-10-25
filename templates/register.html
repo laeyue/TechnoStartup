@@ -1,317 +1,515 @@
 {% extends "base.html" %}
 
-{% block title %}Green Stamp | Register Project{% endblock %}
+{% block title %}Register Project | Green Stamp{% endblock %}
 
 {% block styles %}
 <style>
-    main {
-      padding: 2rem;
-      max-width: 600px;
-      margin: 2rem auto;
-      background: var(--gradient-light);
-      border: 1px solid rgba(133, 169, 71, 0.3);
-      border-radius: .75rem;
-      box-shadow: var(--shadow-xl);
-      position: relative;
-      overflow: hidden;
+  .register-hero {
+    background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-700) 100%);
+    color: var(--text-inverse);
+    padding: var(--space-16) 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .register-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+    opacity: 0.3;
+  }
+
+  .register-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .register-form {
+    background: var(--surface-elevated);
+    border-radius: var(--radius-3xl);
+    padding: var(--space-12);
+    margin: var(--space-16) auto;
+    max-width: 600px;
+    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .register-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--primary-500), var(--accent-500));
+    border-radius: var(--radius-3xl) var(--radius-3xl) 0 0;
+  }
+
+  .form-header {
+    text-align: center;
+    margin-bottom: var(--space-8);
+  }
+
+  .form-title {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-4);
+  }
+
+  .form-subtitle {
+    color: var(--text-secondary);
+    font-size: var(--text-lg);
+  }
+
+  .form-progress {
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--space-8);
+    padding: var(--space-4);
+    background: var(--surface);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border);
+  }
+
+  .progress-step {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    color: var(--text-tertiary);
+    transition: var(--transition-fast);
+  }
+
+  .progress-step.active {
+    background: var(--primary-100);
+    color: var(--primary-600);
+  }
+
+  .progress-step.completed {
+    background: var(--success);
+    color: var(--text-inverse);
+  }
+
+  .progress-step i {
+    font-size: var(--text-sm);
+  }
+
+  .form-section {
+    margin-bottom: var(--space-8);
+  }
+
+  .section-title {
+    font-size: var(--text-xl);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-2);
+    border-bottom: 2px solid var(--primary-100);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  .form-group {
+    position: relative;
+  }
+
+  .form-group.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .form-label {
+    display: block;
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+    font-size: var(--text-sm);
+  }
+
+  .form-input {
+    width: 100%;
+    padding: var(--space-4);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-base);
+    background: var(--surface-elevated);
+    transition: var(--transition-fast);
+    min-height: 48px;
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px var(--primary-100);
+    transform: translateY(-1px);
+  }
+
+  .form-input::placeholder {
+    color: var(--text-tertiary);
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 120px;
+    font-family: inherit;
+  }
+
+  .form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right var(--space-3) center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: var(--space-10);
+  }
+
+  .form-actions {
+    display: flex;
+    gap: var(--space-4);
+    justify-content: center;
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border);
+  }
+
+  .btn-submit {
+    background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+    color: var(--text-inverse);
+    border: none;
+    padding: var(--space-4) var(--space-8);
+    border-radius: var(--radius-xl);
+    font-weight: var(--font-semibold);
+    font-size: var(--text-lg);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    box-shadow: var(--shadow-md);
+    min-width: 200px;
+  }
+
+  .btn-submit:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-submit.loading {
+    position: relative;
+    color: transparent;
+  }
+
+  .btn-submit.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid transparent;
+    border-top: 2px solid var(--text-inverse);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  .form-feedback {
+    margin-top: var(--space-4);
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+    text-align: center;
+    font-weight: var(--font-medium);
+  }
+
+  .form-feedback.success {
+    background: var(--primary-50);
+    color: var(--primary-700);
+    border: 1px solid var(--primary-200);
+  }
+
+  .form-feedback.error {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+  }
+
+  .form-feedback.loading {
+    background: var(--secondary-50);
+    color: var(--secondary-700);
+    border: 1px solid var(--secondary-200);
+  }
+
+  .loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: var(--space-2);
+  }
+
+  .form-help {
+    font-size: var(--text-sm);
+    color: var(--text-tertiary);
+    margin-top: var(--space-2);
+  }
+
+  .required {
+    color: var(--error);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .register-form {
+      margin: var(--space-8) var(--space-4);
+      padding: var(--space-8);
     }
 
-    main::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        linear-gradient(135deg, rgba(133, 169, 71, 0.1) 0%, transparent 50%),
-        linear-gradient(45deg, rgba(62, 123, 39, 0.05) 0%, transparent 50%);
-      z-index: 0;
+    .form-row {
+      grid-template-columns: 1fr;
     }
 
-    main > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .form-header h2 {
-      color: var(--text-primary);
-      font-weight: 700;
-      font-size: var(--text-3xl);
-      margin-bottom: 1rem;
-    }
-
-    .form-header p {
-      color: var(--text-secondary);
-      font-weight: 500;
-      font-size: var(--text-lg);
-      margin-bottom: 2rem;
-    }
-
-    main::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        linear-gradient(135deg, rgba(133, 169, 71, 0.1) 0%, transparent 50%),
-        linear-gradient(45deg, rgba(62, 123, 39, 0.05) 0%, transparent 50%);
-      z-index: 0;
-    }
-
-    main > * {
-      position: relative;
-      z-index: 2;
-    }
-
-    .form-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .form-header h2 {
-      font-size: var(--text-3xl);
-      color: var(--gray-100);
-      margin-bottom: 1rem;
-    }
-
-    .form-header p {
-      color: var(--gray-400);
-      font-size: var(--text-lg);
-    }
-
-    form {
-      display: flex;
+    .form-actions {
       flex-direction: column;
-      gap: 1.5rem;
     }
 
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    label {
-      font-weight: 600;
-      color: var(--gray-100);
-      font-size: var(--text-md);
-    }
-
-    input, textarea {
-      padding: 1rem 1.25rem;
-      border: 2px solid rgba(133, 169, 71, 0.3);
-      border-radius: 12px;
-      font-size: var(--text-base);
-      font-family: var(--font-body);
-      background: var(--white);
-      color: var(--text-primary);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      resize: none;
+    .btn-submit {
       width: 100%;
-      font-weight: 500;
     }
 
-    input::placeholder, textarea::placeholder {
-      color: var(--text-muted);
-      font-weight: 400;
+    .progress-step {
+      font-size: var(--text-xs);
+      padding: var(--space-2);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .register-hero {
+      padding: var(--space-12) 0;
     }
 
-    input:focus, textarea:focus {
-      outline: none;
-      border-color: var(--accent);
-      background: var(--white);
-      box-shadow: 0 0 0 4px rgba(133, 169, 71, 0.2), var(--shadow-md);
-      transform: translateY(-2px);
+    .form-title {
+      font-size: var(--text-2xl);
     }
 
-    .form-group {
-      position: relative;
-      margin-bottom: var(--space-lg);
+    .form-subtitle {
+      font-size: var(--text-base);
     }
-
-    .form-group.focused label {
-      color: var(--accent);
-      transform: translateY(-2px);
-    }
-
-    .form-group.focused input,
-    .form-group.focused textarea {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 4px rgba(133, 169, 71, 0.1);
-    }
-
-    .form-progress {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: var(--space-xl);
-      padding: var(--space-md);
-      background: var(--gradient-light);
-      border-radius: var(--radius-lg);
-    }
-
-    .form-step {
-      display: flex;
-      align-items: center;
-      gap: var(--space-sm);
-      font-size: var(--text-sm);
-      color: var(--text-muted);
-    }
-
-    .form-step.active {
-      color: var(--accent);
-      font-weight: 600;
-    }
-
-    .form-step.completed {
-      color: var(--secondary);
-    }
-
-    input:hover, textarea:hover {
-      border-color: rgba(255, 255, 255, 0.4);
-      background: rgba(255, 255, 255, 0.12);
-    }
-
-    .thank-you {
-      display: none;
-      text-align: center;
-      font-size: var(--text-xl);
-      color: var(--text-white);
-      font-weight: bold;
-      padding: 2rem;
-      background: var(--gradient-primary);
-      border-radius: .75rem;
-      border: 1px solid rgba(133, 169, 71, 0.3);
-      box-shadow: var(--shadow-lg);
-      animation: slideInUp 0.5s ease-out;
-    }
-
-    .loading {
-      display: none;
-      text-align: center;
-      padding: 1rem;
-      color: var(--text-primary);
-      font-weight: 500;
-    }
-
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid rgba(46, 125, 50, 0.3);
-      border-top: 4px solid var(--accent-regular);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 1rem;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    @keyframes slideInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .form-group {
-      position: relative;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      font-size: var(--text-md);
-      transition: color 0.3s ease;
-    }
-
-    .form-group:focus-within label {
-      color: var(--accent-regular);
-    }
-
-    @media (min-width: 50em) {
-      main {
-        border-radius: 1.5rem;
-        padding: 3rem;
-      }
-
-      .form-header h2 {
-        font-size: var(--text-4xl);
-      }
-    }
+  }
 </style>
 {% endblock %}
 
 {% block content %}
-<main>
-  <div class="form-header">
-    <h2>Register Your Project</h2>
-    <p>Submit your community or environmental project for Green Stamp evaluation.</p>
+<!-- Hero Section -->
+<section class="register-hero">
+  <div class="container">
+    <div class="register-hero-content">
+      <h1 class="heading-1">Register Your Project</h1>
+      <p class="text-large">
+        Join the global network of certified environmental projects. 
+        Get your Green Stamp and showcase your impact.
+      </p>
+    </div>
   </div>
-  
-      <form id="registerForm">
-        <div class="form-group">
-          <label for="projectName">Project Name</label>
-          <input type="text" id="projectName" name="projectName" placeholder="Enter your project name" required />
-        </div>
-        
-        <div class="form-group">
-          <label for="location">Location</label>
-          <input type="text" id="location" name="location" placeholder="Enter project location" required />
-        </div>
-        
-        <div class="form-group">
-          <label for="description">Project Description</label>
-          <textarea id="description" name="description" rows="4" placeholder="Describe your project and its environmental impact" required></textarea>
-        </div>
-        
-        <button type="submit" class="btn" id="submitBtn">
-          <span id="btnText">Submit Project</span>
-        </button>
-      </form>
-      
-      <div class="loading" id="loadingMsg">
-        <div class="spinner"></div>
-        <p>Submitting your project...</p>
+</section>
+
+<!-- Registration Form -->
+<div class="container">
+  <form class="register-form" id="registerForm">
+    <div class="form-header">
+      <h2 class="form-title">Project Registration</h2>
+      <p class="form-subtitle">Tell us about your environmental project</p>
+    </div>
+
+    <div class="form-progress">
+      <div class="progress-step active">
+        <i class="fas fa-info-circle"></i>
+        <span>Project Details</span>
       </div>
-      
-      <div class="thank-you" id="thankYouMsg">
-        🌿 Thank you for submitting your project! Our team will review it soon.
+      <div class="progress-step">
+        <i class="fas fa-user"></i>
+        <span>Contact Info</span>
       </div>
-</main>
+      <div class="progress-step">
+        <i class="fas fa-check"></i>
+        <span>Review & Submit</span>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3 class="section-title">Project Information</h3>
+      
+      <div class="form-group">
+        <label for="name" class="form-label">
+          Project Name <span class="required">*</span>
+        </label>
+        <input 
+          type="text" 
+          id="name" 
+          name="name" 
+          class="form-input" 
+          placeholder="Enter your project name"
+          required
+        >
+        <div class="form-help">Choose a clear, descriptive name for your project</div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="location" class="form-label">
+            Location <span class="required">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="location" 
+            name="location" 
+            class="form-input" 
+            placeholder="City, Country"
+            required
+          >
+        </div>
+        
+        <div class="form-group">
+          <label for="category" class="form-label">
+            Category <span class="required">*</span>
+          </label>
+          <select id="category" name="category" class="form-input form-select" required>
+            <option value="">Select category</option>
+            <option value="renewable-energy">Renewable Energy</option>
+            <option value="conservation">Conservation</option>
+            <option value="waste-reduction">Waste Reduction</option>
+            <option value="biodiversity">Biodiversity</option>
+            <option value="water-management">Water Management</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group full-width">
+        <label for="description" class="form-label">
+          Project Description <span class="required">*</span>
+        </label>
+        <textarea 
+          id="description" 
+          name="description" 
+          class="form-input form-textarea" 
+          placeholder="Describe your project's environmental impact, goals, and implementation details..."
+          required
+        ></textarea>
+        <div class="form-help">Provide detailed information about your project's environmental benefits</div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3 class="section-title">Contact Information</h3>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="contact_name" class="form-label">
+            Contact Name <span class="required">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="contact_name" 
+            name="contact_name" 
+            class="form-input" 
+            placeholder="Your full name"
+            required
+          >
+        </div>
+        
+        <div class="form-group">
+          <label for="email" class="form-label">
+            Email Address <span class="required">*</span>
+          </label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            class="form-input" 
+            placeholder="your@email.com"
+            required
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="organization" class="form-label">Organization (Optional)</label>
+        <input 
+          type="text" 
+          id="organization" 
+          name="organization" 
+          class="form-input" 
+          placeholder="Your organization name"
+        >
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-submit">
+        <i class="fas fa-paper-plane"></i>
+        Submit Application
+      </button>
+    </div>
+
+    <div id="formFeedback" class="form-feedback hidden"></div>
+  </form>
+</div>
 {% endblock %}
 
 {% block scripts %}
 <script>
-  const form = document.getElementById("registerForm");
-  const thankYou = document.getElementById("thankYouMsg");
-  const loading = document.getElementById("loadingMsg");
-  const submitBtn = document.getElementById("submitBtn");
-  const btnText = document.getElementById("btnText");
+  const form = document.getElementById('registerForm');
+  const submitBtn = document.querySelector('.btn-submit');
+  const feedback = document.getElementById('formFeedback');
+  const progressSteps = document.querySelectorAll('.progress-step');
 
-  form.addEventListener("submit", async (e) => {
+  // Form submission
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     // Show loading state
-    form.style.display = "none";
-    loading.style.display = "block";
+    submitBtn.classList.add('loading');
     submitBtn.disabled = true;
-    btnText.textContent = "Submitting...";
-    
+    feedback.className = 'form-feedback loading';
+    feedback.innerHTML = '<div class="loading-spinner"></div>Submitting your application...';
+    feedback.classList.remove('hidden');
+
     const formData = {
-      name: document.getElementById("projectName").value,
-      location: document.getElementById("location").value,
-      description: document.getElementById("description").value
+      name: document.getElementById('name').value,
+      location: document.getElementById('location').value,
+      description: document.getElementById('description').value,
+      category: document.getElementById('category').value,
+      contact_name: document.getElementById('contact_name').value,
+      email: document.getElementById('email').value,
+      organization: document.getElementById('organization').value
     };
 
     try {
@@ -324,35 +522,107 @@
       });
 
       const result = await response.json();
-      
+
       if (result.success) {
-        loading.style.display = "none";
-        thankYou.style.display = "block";
+        feedback.className = 'form-feedback success';
+        feedback.innerHTML = '<i class="fas fa-check-circle"></i> Application submitted successfully! We\'ll review your project and get back to you soon.';
+        
+        // Reset form
+        form.reset();
+        updateProgress(1);
       } else {
-        loading.style.display = "none";
-        form.style.display = "block";
-        submitBtn.disabled = false;
-        btnText.textContent = "Submit Project";
-        alert('Error: ' + result.message);
+        feedback.className = 'form-feedback error';
+        feedback.innerHTML = '<i class="fas fa-exclamation-circle"></i> Error: ' + result.message;
       }
     } catch (error) {
-      loading.style.display = "none";
-      form.style.display = "block";
+      feedback.className = 'form-feedback error';
+      feedback.innerHTML = '<i class="fas fa-exclamation-circle"></i> Error submitting application: ' + error.message;
+    } finally {
+      submitBtn.classList.remove('loading');
       submitBtn.disabled = false;
-      btnText.textContent = "Submit Project";
-      alert('Error submitting project: ' + error.message);
     }
   });
 
-  // Add smooth focus animations
-  const inputs = document.querySelectorAll('input, textarea');
-  inputs.forEach(input => {
-    input.addEventListener('focus', function() {
-      this.parentElement.classList.add('focused');
+  // Update progress steps
+  function updateProgress(activeStep) {
+    progressSteps.forEach((step, index) => {
+      step.classList.remove('active', 'completed');
+      if (index < activeStep) {
+        step.classList.add('completed');
+      } else if (index === activeStep) {
+        step.classList.add('active');
+      }
     });
+  }
+
+  // Form validation
+  const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
+  inputs.forEach(input => {
+    input.addEventListener('blur', validateField);
+    input.addEventListener('input', clearFieldError);
+  });
+
+  function validateField(e) {
+    const field = e.target;
+    const value = field.value.trim();
     
-    input.addEventListener('blur', function() {
-      this.parentElement.classList.remove('focused');
+    if (!value) {
+      showFieldError(field, 'This field is required');
+    } else if (field.type === 'email' && !isValidEmail(value)) {
+      showFieldError(field, 'Please enter a valid email address');
+    } else {
+      clearFieldError(e);
+    }
+  }
+
+  function showFieldError(field, message) {
+    clearFieldError({ target: field });
+    field.style.borderColor = 'var(--error)';
+    
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'field-error';
+    errorDiv.style.color = 'var(--error)';
+    errorDiv.style.fontSize = 'var(--text-sm)';
+    errorDiv.style.marginTop = 'var(--space-1)';
+    errorDiv.textContent = message;
+    
+    field.parentNode.appendChild(errorDiv);
+  }
+
+  function clearFieldError(e) {
+    const field = e.target;
+    field.style.borderColor = '';
+    
+    const errorDiv = field.parentNode.querySelector('.field-error');
+    if (errorDiv) {
+      errorDiv.remove();
+    }
+  }
+
+  function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  // Auto-save form data
+  const formInputs = form.querySelectorAll('input, textarea, select');
+  formInputs.forEach(input => {
+    // Load saved data
+    const savedValue = localStorage.getItem(`form_${input.name}`);
+    if (savedValue) {
+      input.value = savedValue;
+    }
+
+    // Save data on input
+    input.addEventListener('input', () => {
+      localStorage.setItem(`form_${input.name}`, input.value);
+    });
+  });
+
+  // Clear saved data on successful submission
+  form.addEventListener('submit', () => {
+    formInputs.forEach(input => {
+      localStorage.removeItem(`form_${input.name}`);
     });
   });
 </script>

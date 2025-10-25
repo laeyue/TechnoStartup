@@ -1,333 +1,418 @@
 {% extends "base.html" %}
 
-{% block title %}Green Stamp | Home{% endblock %}
+{% block title %}Green Stamp | Sustainable Project Certification{% endblock %}
 
 {% block styles %}
 <style>
-    .hero {
-      text-align: center;
-      padding: var(--space-3xl) var(--space-xl);
-      font-size: var(--text-lg);
-      background: var(--gradient-primary);
-      border-radius: var(--radius-xl);
-      margin: var(--space-xl) 0;
-      position: relative;
-      overflow: hidden;
-      box-shadow: var(--shadow-xl);
-      min-height: 60vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
+  .hero {
+    background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-700) 100%);
+    color: var(--text-inverse);
+    padding: var(--space-24) 0;
+    position: relative;
+    overflow: hidden;
+  }
 
-    .hero::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        radial-gradient(circle at 20% 30%, rgba(133, 169, 71, 0.2) 0%, transparent 60%),
-        radial-gradient(circle at 80% 70%, rgba(239, 227, 194, 0.15) 0%, transparent 60%);
-      animation: parallaxFloat 20s ease-in-out infinite;
-      z-index: 0;
-    }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+  }
 
-    @keyframes parallaxFloat {
-      0%, 100% { transform: translateY(0px) translateX(0px); }
-      25% { transform: translateY(-10px) translateX(5px); }
-      50% { transform: translateY(0px) translateX(10px); }
-      75% { transform: translateY(10px) translateX(5px); }
-    }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
 
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        radial-gradient(circle at 30% 20%, rgba(133, 169, 71, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 70% 80%, rgba(239, 227, 194, 0.2) 0%, transparent 50%);
-      z-index: 0;
-    }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    margin-bottom: var(--space-6);
+    animation: float 3s ease-in-out infinite;
+  }
 
-    .hero > * {
-      position: relative;
-      z-index: 1;
-    }
+  .hero-title {
+    font-size: var(--text-7xl);
+    font-weight: var(--font-extrabold);
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-6);
+    background: linear-gradient(135deg, #ffffff 0%, #f0f9f4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 
-    .hero .title {
-      color: var(--text-white);
-      font-weight: 700;
+  .hero-subtitle {
+    font-size: var(--text-xl);
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-8);
+    opacity: 0.9;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: var(--space-4);
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--space-12);
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-8);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-number {
+    display: block;
+    font-size: var(--text-4xl);
+    font-weight: var(--font-bold);
+    color: var(--accent-400);
+    margin-bottom: var(--space-2);
+  }
+
+  .stat-label {
+    font-size: var(--text-sm);
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .features {
+    padding: var(--space-20) 0;
+    background: var(--surface);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-8);
+    margin-top: var(--space-12);
+  }
+
+  .feature-card {
+    background: var(--surface-elevated);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-8);
+    text-align: center;
+    border: 1px solid var(--border);
+    transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-500), var(--accent-500));
+    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .feature-icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+    border-radius: var(--radius-2xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-6);
+    font-size: var(--text-2xl);
+    color: var(--text-inverse);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .feature-title {
+    font-size: var(--text-xl);
+    font-weight: var(--font-semibold);
+    margin-bottom: var(--space-4);
+    color: var(--text-primary);
+  }
+
+  .feature-description {
+    color: var(--text-secondary);
+    line-height: var(--leading-relaxed);
+  }
+
+  .cta-section {
+    background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-800) 100%);
+    color: var(--text-inverse);
+    padding: var(--space-20) 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+    opacity: 0.5;
+  }
+
+  .cta-content {
+    position: relative;
+    z-index: 2;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .cta-title {
+    font-size: var(--text-5xl);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--space-6);
+  }
+
+  .cta-description {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-8);
+    opacity: 0.9;
+  }
+
+  .cta-actions {
+    display: flex;
+    gap: var(--space-4);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-cta-primary {
+    background: var(--text-inverse);
+    color: var(--primary-600);
+    font-weight: var(--font-semibold);
+    padding: var(--space-4) var(--space-8);
+    border-radius: var(--radius-xl);
+    text-decoration: none;
+    transition: var(--transition-fast);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .btn-cta-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .btn-cta-secondary {
+    background: transparent;
+    color: var(--text-inverse);
+    border: 2px solid var(--text-inverse);
+    font-weight: var(--font-semibold);
+    padding: var(--space-4) var(--space-8);
+    border-radius: var(--radius-xl);
+    text-decoration: none;
+    transition: var(--transition-fast);
+  }
+
+  .btn-cta-secondary:hover {
+    background: var(--text-inverse);
+    color: var(--primary-600);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .hero-title {
       font-size: var(--text-5xl);
-      margin-bottom: var(--space-lg);
-      line-height: var(--leading-tight);
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
 
-    .hero .tagline {
-      color: var(--text-white);
-      font-weight: 500;
-      font-size: var(--text-xl);
-      opacity: 0.95;
-      max-width: 600px;
-      line-height: var(--leading-relaxed);
-      margin-bottom: var(--space-xl);
+    .hero-subtitle {
+      font-size: var(--text-lg);
     }
 
-    .hero .cta-section {
-      display: flex;
+    .hero-actions {
       flex-direction: column;
-      gap: var(--space-md);
       align-items: center;
     }
 
-    .hero .stats {
-      display: flex;
-      gap: var(--space-xl);
-      margin-top: var(--space-lg);
-      font-size: var(--text-sm);
-      opacity: 0.9;
+    .hero-stats {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-6);
     }
 
-    .hero .stat {
-      text-align: center;
+    .features-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
     }
 
-    .hero .stat-number {
-      font-size: var(--text-2xl);
-      font-weight: 700;
-      display: block;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        radial-gradient(circle at 30% 20%, rgba(133, 169, 71, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 70% 80%, rgba(239, 227, 194, 0.2) 0%, transparent 50%);
-      z-index: 0;
-    }
-
-    .hero > * {
-      position: relative;
-      z-index: 2;
-    }
-
-    .hero .title, .hero .tagline {
-      max-width: 37ch;
-      margin-inline: auto;
-    }
-
-    .hero .title {
+    .cta-title {
       font-size: var(--text-3xl);
-      color: var(--gray-999);
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
 
-    .hero .tagline {
-      font-size: var(--text-lg);
-      color: var(--gray-100);
-      margin-bottom: 2rem;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    .cta-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero {
+      padding: var(--space-16) 0;
     }
 
-    .skills {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      margin: 4rem 0;
+    .hero-title {
+      font-size: var(--text-4xl);
     }
 
-    .skill-card {
-      border: 1px solid rgba(133, 169, 71, 0.3);
-      border-radius: .75rem;
-      padding: 1.5rem;
-      background: var(--gradient-light);
-      box-shadow: var(--shadow-lg);
-      text-align: center;
-      transition: transform var(--theme-transition);
-      position: relative;
-      overflow: hidden;
+    .hero-stats {
+      grid-template-columns: 1fr;
     }
 
-    .skill-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        linear-gradient(135deg, rgba(133, 169, 71, 0.1) 0%, transparent 50%),
-        linear-gradient(45deg, rgba(62, 123, 39, 0.05) 0%, transparent 50%);
-      z-index: 0;
+    .stat-number {
+      font-size: var(--text-3xl);
     }
-
-    .skill-card > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .skill-card h3 {
-      color: var(--text-primary);
-      font-weight: 700;
-      font-size: var(--text-xl);
-      margin-bottom: 1rem;
-    }
-
-    .skill-card p {
-      color: var(--text-secondary);
-      font-weight: 500;
-      line-height: 1.6;
-    }
-
-    .skill-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        linear-gradient(135deg, rgba(133, 169, 71, 0.1) 0%, transparent 50%),
-        linear-gradient(45deg, rgba(62, 123, 39, 0.05) 0%, transparent 50%);
-      z-index: 0;
-    }
-
-    .skill-card {
-      animation: fadeInUp 0.6s ease-out;
-    }
-
-    .skill-card:nth-child(1) { animation-delay: 0.1s; }
-    .skill-card:nth-child(2) { animation-delay: 0.2s; }
-    .skill-card:nth-child(3) { animation-delay: 0.3s; }
-
-    .skill-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: var(--shadow-xl);
-      border-color: var(--accent);
-    }
-
-    .skill-card:hover::before {
-      background: 
-        linear-gradient(135deg, rgba(133, 169, 71, 0.2) 0%, transparent 50%),
-        linear-gradient(45deg, rgba(62, 123, 39, 0.1) 0%, transparent 50%);
-    }
-
-    .skill-card h3 {
-      transition: color var(--transition-normal);
-    }
-
-    .skill-card:hover h3 {
-      color: var(--accent);
-    }
-
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .skill-card:nth-child(1) {
-      background: var(--gradient-light);
-    }
-
-    .skill-card:nth-child(2) {
-      background: var(--gradient-light);
-    }
-
-    .skill-card:nth-child(3) {
-      background: var(--gradient-light);
-    }
-
-    .skill-card h3 {
-      font-size: var(--text-lg);
-      margin-bottom: 1rem;
-    }
-
-    .skill-card p {
-      color: var(--gray-400);
-      line-height: 1.6;
-    }
-
-    @media (min-width: 50em) {
-      .hero {
-        font-size: var(--text-xl);
-      }
-
-      .hero .title {
-        font-size: var(--text-5xl);
-      }
-
-      .skills {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 3rem;
-      }
-
-      .skill-card {
-        border-radius: 1.5rem;
-        padding: 2.5rem;
-      }
-
-      .skill-card h3 {
-        font-size: var(--text-2xl);
-      }
-    }
+  }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="wrapper stack gap-8">
-  <header class="hero">
-    <h1 class="title">Green Stamp</h1>
-    <p class="tagline">Certifying community and environmental projects for a sustainable future. Join thousands of verified projects making a real impact.</p>
-    <div class="cta-section">
-      <a href="/register" class="btn">Register Your Project</a>
-      <a href="/projects" class="btn" style="background: var(--gradient-accent); color: var(--text-primary);">View Certified Projects</a>
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="fas fa-certificate"></i>
+        <span>Trusted by 500+ Organizations</span>
+      </div>
+      
+      <h1 class="hero-title">Certify Your Impact</h1>
+      
+      <p class="hero-subtitle">
+        Join the global movement of verified environmental projects. 
+        Get your Green Stamp certification and showcase your commitment to sustainability.
+      </p>
+      
+      <div class="hero-actions">
+        <a href="/register" class="btn btn-primary btn-lg">
+          <i class="fas fa-plus-circle"></i>
+          Register Project
+        </a>
+        <a href="/projects" class="btn btn-secondary btn-lg">
+          <i class="fas fa-eye"></i>
+          View Projects
+        </a>
+      </div>
+      
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-number">500+</span>
+          <span class="stat-label">Certified Projects</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <span class="stat-label">Countries</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">98%</span>
+          <span class="stat-label">Success Rate</span>
+        </div>
+      </div>
     </div>
-    <div class="stats">
-      <div class="stat">
-        <span class="stat-number">150+</span>
-        <span>Certified Projects</span>
-      </div>
-      <div class="stat">
-        <span class="stat-number">25</span>
-        <span>Companies</span>
-      </div>
-      <div class="stat">
-        <span class="stat-number">98%</span>
-        <span>Success Rate</span>
-      </div>
-    </div>
-  </header>
+  </div>
+</section>
 
-  <section class="skills">
-    <div class="skill-card">
-      <h3>🌱 Environmental Impact</h3>
-      <p>We evaluate projects based on their positive environmental impact, biodiversity protection, and sustainability practices.</p>
+<!-- Features Section -->
+<section class="features">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="heading-2">Why Choose Green Stamp?</h2>
+      <p class="text-large text-muted mb-8">
+        Our comprehensive certification process ensures your environmental impact is recognized and trusted globally.
+      </p>
     </div>
-    <div class="skill-card">
-      <h3>🏆 Quality Assurance</h3>
-      <p>Our rigorous certification process ensures that only legitimate, well-executed projects receive the Green Stamp.</p>
+    
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-leaf"></i>
+        </div>
+        <h3 class="feature-title">Environmental Impact</h3>
+        <p class="feature-description">
+          We evaluate projects based on their positive environmental impact, biodiversity protection, 
+          and sustainability practices to ensure real change.
+        </p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h3 class="feature-title">Quality Assurance</h3>
+        <p class="feature-description">
+          Our rigorous certification process ensures that only legitimate, well-executed projects 
+          receive the Green Stamp recognition.
+        </p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <h3 class="feature-title">Community Trust</h3>
+        <p class="feature-description">
+          Building trust between project creators and the community through transparent 
+          evaluation and verification processes.
+        </p>
+      </div>
     </div>
-    <div class="skill-card">
-      <h3>🤝 Community Trust</h3>
-      <p>Building trust between project creators and the community through transparent evaluation and verification processes.</p>
+  </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-content">
+      <h2 class="cta-title">Ready to Make a Difference?</h2>
+      <p class="cta-description">
+        Join thousands of organizations making a real environmental impact. 
+        Get your project certified today and showcase your commitment to sustainability.
+      </p>
+      <div class="cta-actions">
+        <a href="/register" class="btn-cta-primary">
+          <i class="fas fa-rocket"></i>
+          Start Your Application
+        </a>
+        <a href="/projects" class="btn-cta-secondary">
+          <i class="fas fa-search"></i>
+          Explore Projects
+        </a>
+      </div>
     </div>
-  </section>
-</div>
+  </div>
+</section>
 {% endblock %}

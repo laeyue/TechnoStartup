@@ -1,304 +1,479 @@
 {% extends "base.html" %}
 
-{% block title %}Green Stamp | Certified Projects{% endblock %}
+{% block title %}Certified Projects | Green Stamp{% endblock %}
 
 {% block styles %}
 <style>
-    .page-header {
-      text-align: center;
-      padding: 6rem 2rem;
-      background: var(--gradient-primary);
-      border-radius: 1rem;
-      margin: 2rem 0;
-      position: relative;
-      overflow: hidden;
-      box-shadow: var(--shadow-xl);
-    }
+  .projects-hero {
+    background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-700) 100%);
+    color: var(--text-inverse);
+    padding: var(--space-20) 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
 
-    .page-header::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        radial-gradient(circle at 30% 20%, rgba(133, 169, 71, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 70% 80%, rgba(239, 227, 194, 0.2) 0%, transparent 50%);
-      z-index: 0;
-    }
+  .projects-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="hexagons" width="20" height="20" patternUnits="userSpaceOnUse"><polygon points="10,2 18,6 18,14 10,18 2,14 2,6" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23hexagons)"/></svg>');
+    opacity: 0.3;
+  }
 
-    .page-header > * {
-      position: relative;
-      z-index: 1;
-    }
+  .projects-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 0 auto;
+  }
 
-    .page-header h1 {
-      color: var(--text-white);
-      font-weight: 700;
-      font-size: var(--text-4xl);
-      margin-bottom: 1rem;
-    }
+  .projects-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    margin-bottom: var(--space-6);
+    animation: float 3s ease-in-out infinite;
+  }
 
-    .page-header p {
-      color: var(--text-white);
-      font-weight: 500;
-      font-size: var(--text-lg);
-      opacity: 0.9;
-    }
+  .projects-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--space-8);
+    margin-top: var(--space-12);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 
-    .page-header::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        radial-gradient(circle at 30% 20%, rgba(133, 169, 71, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 70% 80%, rgba(239, 227, 194, 0.2) 0%, transparent 50%);
-      z-index: 0;
-    }
+  .stat-item {
+    text-align: center;
+  }
 
-    .page-header > * {
-      position: relative;
-      z-index: 2;
-    }
+  .stat-number {
+    display: block;
+    font-size: var(--text-4xl);
+    font-weight: var(--font-bold);
+    color: var(--accent-400);
+    margin-bottom: var(--space-2);
+  }
 
-    .page-header h1 {
-      font-size: var(--text-4xl);
-      color: var(--gray-999);
-      margin-bottom: 1rem;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    }
+  .stat-label {
+    font-size: var(--text-sm);
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
 
-    .page-header p {
-      font-size: var(--text-lg);
-      color: var(--gray-100);
-      max-width: 50ch;
-      margin: 0 auto;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-    }
+  .projects-section {
+    padding: var(--space-20) 0;
+    background: var(--surface);
+  }
 
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--space-8);
+    margin-top: var(--space-12);
+  }
+
+  .project-card {
+    background: var(--surface-elevated);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-8);
+    box-shadow: var(--shadow-base);
+    border: 1px solid var(--border);
+    transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-500), var(--accent-500));
+    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+  }
+
+  .project-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .project-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: var(--space-6);
+    position: relative;
+  }
+
+  .project-title {
+    font-size: var(--text-xl);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+    line-height: var(--leading-tight);
+    flex: 1;
+    margin-right: var(--space-4);
+  }
+
+  .project-location {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-4);
+  }
+
+  .project-location i {
+    color: var(--primary-500);
+  font-size: var(--text-sm);
+  }
+
+  .project-description {
+    color: var(--text-secondary);
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-6);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .project-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border);
+  }
+
+  .certification-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: linear-gradient(135deg, var(--success), var(--primary-500));
+    color: var(--text-inverse);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .certification-badge i {
+    font-size: var(--text-sm);
+  }
+
+  .certification-date {
+    color: var(--text-tertiary);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+  }
+
+  .project-category {
+    background: var(--primary-100);
+    color: var(--primary-700);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: var(--font-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+    align-self: flex-start;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: var(--space-16) 0;
+    color: var(--text-secondary);
+  }
+
+  .empty-state-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--secondary-100);
+    border-radius: var(--radius-2xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-6);
+    font-size: var(--text-3xl);
+    color: var(--secondary-500);
+  }
+
+  .empty-state-title {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-4);
+  }
+
+  .empty-state-description {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-8);
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .filter-section {
+    background: var(--surface-elevated);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-8);
+    margin-bottom: var(--space-12);
+    border: 1px solid var(--border);
+  }
+
+  .filter-title {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-6);
+  }
+
+  .filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-4);
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .filter-label {
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    color: var(--text-secondary);
+  }
+
+  .filter-select {
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface-elevated);
+    font-size: var(--text-sm);
+    transition: var(--transition-fast);
+  }
+
+  .filter-select:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px var(--primary-100);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
     .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 2rem;
-      padding: 2rem 0;
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
     }
 
     .project-card {
-      background: var(--gradient-light);
-      border: 1px solid rgba(133, 169, 71, 0.3);
-      border-radius: .75rem;
-      padding: 2rem;
-      box-shadow: var(--shadow-lg);
-      transition: box-shadow var(--theme-transition), transform var(--theme-transition);
-      position: relative;
-      overflow: hidden;
+      padding: var(--space-6);
     }
 
-    .project-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        linear-gradient(135deg, rgba(133, 169, 71, 0.1) 0%, transparent 50%),
-        linear-gradient(45deg, rgba(62, 123, 39, 0.05) 0%, transparent 50%);
-      z-index: 0;
+    .projects-stats {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-6);
     }
 
-    .project-card > * {
-      position: relative;
-      z-index: 1;
+    .filter-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .projects-hero {
+      padding: var(--space-16) 0;
     }
 
-    .project-card h3 {
-      color: var(--text-primary);
-      font-weight: 700;
-      font-size: var(--text-xl);
-      margin-bottom: 1rem;
+    .projects-stats {
+      grid-template-columns: 1fr;
     }
 
-    .project-card .location {
-      color: var(--text-secondary);
-      font-weight: 500;
-      margin-bottom: 1rem;
+    .stat-number {
+      font-size: var(--text-3xl);
     }
 
-    .project-card p {
-      color: var(--text-secondary);
-      font-weight: 500;
-      line-height: 1.6;
-      margin-bottom: 1rem;
+    .project-header {
+      flex-direction: column;
+      align-items: flex-start;
     }
 
-    .project-card .badge {
-      color: var(--text-white);
-      font-weight: 600;
-      background: var(--gradient-primary);
-      padding: 0.5rem 1rem;
-      border-radius: 999rem;
-      display: inline-block;
-      margin-bottom: 0.5rem;
-      box-shadow: var(--shadow-sm);
+    .project-category {
+      position: static;
+      margin-top: var(--space-4);
+      align-self: flex-start;
     }
-
-    .project-card .certification-date {
-      color: var(--text-secondary);
-      font-weight: 500;
-      font-size: var(--text-sm);
-    }
-
-    .project-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        linear-gradient(135deg, rgba(133, 169, 71, 0.1) 0%, transparent 50%),
-        linear-gradient(45deg, rgba(62, 123, 39, 0.05) 0%, transparent 50%);
-      z-index: 0;
-    }
-
-    .project-card > * {
-      position: relative;
-      z-index: 2;
-    }
-
-    .project-card {
-      animation: fadeInUp 0.6s ease-out;
-    }
-
-    .project-card:nth-child(1) { animation-delay: 0.1s; }
-    .project-card:nth-child(2) { animation-delay: 0.2s; }
-    .project-card:nth-child(3) { animation-delay: 0.3s; }
-    .project-card:nth-child(4) { animation-delay: 0.4s; }
-    .project-card:nth-child(5) { animation-delay: 0.5s; }
-    .project-card:nth-child(6) { animation-delay: 0.6s; }
-
-    .project-card:hover {
-      box-shadow: var(--shadow-xl);
-      transform: translateY(-8px) scale(1.02);
-      border-color: var(--accent);
-    }
-
-    .project-card:hover::before {
-      background: 
-        linear-gradient(135deg, rgba(133, 169, 71, 0.2) 0%, transparent 50%),
-        linear-gradient(45deg, rgba(62, 123, 39, 0.1) 0%, transparent 50%);
-    }
-
-    .project-card:hover h3 {
-      color: var(--accent);
-    }
-
-    .project-card .badge {
-      transition: all var(--transition-normal);
-    }
-
-    .project-card:hover .badge {
-      transform: scale(1.05);
-      box-shadow: var(--shadow-md);
-    }
-
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .project-card h3 {
-      font-size: var(--text-xl);
-      color: var(--gray-100);
-      margin-bottom: 1rem;
-    }
-
-    .project-card .location {
-      color: var(--accent-regular);
-      font-weight: 600;
-      font-size: var(--text-md);
-      margin-bottom: 1rem;
-    }
-
-    .project-card p {
-      color: var(--gray-400);
-      line-height: 1.6;
-      margin-bottom: 1.5rem;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--gradient-accent);
-      color: var(--accent-text-over);
-      padding: 0.5rem 1rem;
-      border-radius: 999rem;
-      font-size: var(--text-sm);
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-
-    .certification-date {
-      color: var(--gray-500);
-      font-size: var(--text-sm);
-    }
-
-    @media (min-width: 50em) {
-      .page-header {
-        padding: 6rem 2rem;
-      }
-
-      .page-header h1 {
-        font-size: var(--text-5xl);
-      }
-
-      .projects-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 3rem;
-        padding: 4rem 0;
-      }
-
-      .project-card {
-        border-radius: 1.5rem;
-        padding: 2.5rem;
-      }
-
-      .project-card h3 {
-        font-size: var(--text-2xl);
-      }
-    }
+  }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="wrapper">
-  <header class="page-header">
-    <h1>Certified Projects</h1>
-    <p>Explore our collection of verified environmental and community projects that have earned the Green Stamp certification.</p>
-  </header>
-
-  <main class="projects-grid">
-    {% for project in projects %}
-    <div class="project-card">
-      <h3>{{ project.name }}</h3>
-      <div class="location">📍 {{ project.location }}</div>
-      <p>{{ project.description }}</p>
-      <div class="badge">✅ Green Stamp Certified</div>
-      <div class="certification-date">Certified on: {{ project.certified_at.strftime('%B %Y') if project.certified_at else 'Pending' }}</div>
+<!-- Hero Section -->
+<section class="projects-hero">
+  <div class="container">
+    <div class="projects-hero-content">
+      <div class="projects-hero-badge">
+        <i class="fas fa-certificate"></i>
+        <span>Verified Environmental Impact</span>
+      </div>
+      
+      <h1 class="heading-1">Certified Projects</h1>
+      
+      <p class="text-large">
+        Discover the global network of verified environmental projects making a real impact. 
+        Each project has been rigorously evaluated and certified by our expert team.
+      </p>
+      
+      <div class="projects-stats">
+        <div class="stat-item">
+          <span class="stat-number">{{ projects|length }}</span>
+          <span class="stat-label">Total Projects</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <span class="stat-label">Countries</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">98%</span>
+          <span class="stat-label">Success Rate</span>
+        </div>
+      </div>
     </div>
-    {% endfor %}
-  </main>
-</div>
+  </div>
+</section>
+
+<!-- Projects Section -->
+<section class="projects-section">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="heading-2">Our Certified Projects</h2>
+      <p class="text-large text-muted mb-8">
+        Each project represents a commitment to environmental sustainability and positive impact.
+      </p>
+    </div>
+
+    {% if projects %}
+    <div class="projects-grid">
+      {% for project in projects %}
+      <div class="project-card">
+        <div class="project-category">
+          {{ project.category or 'Environmental' }}
+        </div>
+        
+        <div class="project-header">
+          <div>
+            <h3 class="project-title">{{ project.name }}</h3>
+            <div class="project-location">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>{{ project.location }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <p class="project-description">{{ project.description }}</p>
+        
+        <div class="project-footer">
+          <div class="certification-badge">
+            <i class="fas fa-check-circle"></i>
+            <span>Green Stamp Certified</span>
+          </div>
+          <div class="certification-date">
+            Certified {{ project.certified_at.strftime('%B %Y') if project.certified_at else 'Pending' }}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-state-icon">
+        <i class="fas fa-leaf"></i>
+      </div>
+      <h3 class="empty-state-title">No Projects Yet</h3>
+      <p class="empty-state-description">
+        We're working on certifying amazing environmental projects. 
+        Check back soon to see our growing network of verified initiatives.
+      </p>
+      <a href="/register" class="btn btn-primary btn-lg">
+        <i class="fas fa-plus-circle"></i>
+        Register Your Project
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Add smooth animations to project cards
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, index) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }, index * 100);
+      }
+    });
+  }, observerOptions);
+
+  // Observe project cards for animation
+  document.addEventListener('DOMContentLoaded', () => {
+    const projectCards = document.querySelectorAll('.project-card');
+    projectCards.forEach(card => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(20px)';
+      card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      observer.observe(card);
+    });
+  });
+
+  // Add hover effects to project cards
+  document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-8px) scale(1.02)';
+    });
+    
+    card.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0) scale(1)';
+    });
+  });
+
+  // Add click tracking for analytics (if needed)
+  document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('click', function() {
+      // Track project card clicks
+      console.log('Project card clicked:', this.querySelector('.project-title').textContent);
+    });
+  });
+</script>
 {% endblock %}
